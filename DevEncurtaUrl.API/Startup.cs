@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DevEncurtaUrl.Data.Context;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace DevEncurtaUrl.API
 {
@@ -43,7 +45,22 @@ namespace DevEncurtaUrl.API
                     }
                 ));
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(s => {
+                s.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "DevEncurtaUrl.API",
+                    Version = "v1",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Gustavo Rodrigues",
+                        Email = "gustavo.teste@gmail.com"
+                    }
+                });
+
+                // Criar arquivo XML
+                var xmlFile = "DevEncurtaUrl.API.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                s.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
